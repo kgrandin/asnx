@@ -1,0 +1,14 @@
+
+ItemId DEFINITIONS AUTOMATIC TAGS ::= 
+BEGIN 
+{  
+  ItemId ::= SEQUENCE 
+    { 
+     partnumber IA5String, 
+     quantity INTEGER, 
+     wholesaleprice REAL,  
+     saleprice REAL  
+    }  
+}
+END 
+

@@ -1,0 +1,5 @@
+asnx -- a fast and efficient asn.1 to xddl converter.  
+
+This only supports packed encoding rules.
+
+
