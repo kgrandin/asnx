@@ -1,7 +1,10 @@
 %{
 #include <stdio.h>
 #include <iostream>
+#include "XNode.h"
 #define YYERROR_VERBOSE
+#define YYSTYPE  XNode
+
 int yylex(void);
 void yyerror(char *);
 extern int nline;
@@ -25,7 +28,7 @@ module:
     header body
 
 header: 
-    STRING DEFINITIONS AUTOMATIC TAGS IS_DEFINED_AS { std::cout << $1 << " processed\n";}
+    STRING DEFINITIONS AUTOMATIC TAGS IS_DEFINED_AS { cerr << "processing " <<  $1; }
     |
     ;
 
@@ -43,16 +46,22 @@ assignment:
     ;
 
 sequenceblock:
-    sequenceblock sequencepair { cout << "here" << endl; }
+    sequenceblock sequencepair
     | 
     ;
 
 sequencepair: 
-    STRING STRING 
-    | STRING STRING ','
+    value value ',' { cout << "found " << $1 << " " << $2 << endl; }
+    | value value {  cout << "found terminating " << $1 << " " << $2 << endl; }
     ;
     
-    
+value:
+    STRING { 
+         /* $$.setValue(g_yy_expr_current_string);   */
+         $$ = StringNode(g_yy_expr_current_string);
+         }
+    ;
+
 
 /*
 program:
