@@ -1,7 +1,7 @@
 
-ItemId DEFINITIONS AUTOMATIC TAGS ::= 
+EUTRA-RRC-Definitions DEFINITIONS AUTOMATIC TAGS ::= 
 BEGIN 
-{  
+{
   ItemId ::= SEQUENCE 
     { 
      partnumber IA5String, 

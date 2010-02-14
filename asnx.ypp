@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <iostream>
+#define YYERROR_VERBOSE
 int yylex(void);
 void yyerror(char *);
 extern int nline;
@@ -8,6 +9,7 @@ extern int nchar;
 extern char* yytext;
 using namespace std;
 %}
+
 %token INTEGER
 %token STRING
 %token DEFINITIONS
@@ -18,13 +20,12 @@ using namespace std;
 %token END
 %token SEQUENCE
 %token OPEN
-%token CLOSE
 %%
 module:
     header body
 
 header: 
-    STRING DEFINITIONS AUTOMATIC TAGS IS_DEFINED_AS { std::cout << $1  << " processed\n";}
+    STRING DEFINITIONS AUTOMATIC TAGS IS_DEFINED_AS { std::cout << $1 << " processed\n";}
     |
     ;
 
@@ -38,7 +39,7 @@ assignments:
     ;
 
 assignment:
-    STRING IS_DEFINED_AS SEQUENCE sequenceblock
+    STRING IS_DEFINED_AS SEQUENCE '{' sequenceblock '}'
     ;
 
 sequenceblock:
@@ -47,7 +48,8 @@ sequenceblock:
     ;
 
 sequencepair: 
-    STRING STRING
+    STRING STRING 
+    | STRING STRING ','
     ;
     
     

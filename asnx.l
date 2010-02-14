@@ -1,5 +1,6 @@
 %{
 #include <stdlib.h>
+#include <iostream>
 void yyerror(char *);
 #include "o/asnx.parse.hpp"
 
@@ -16,13 +17,13 @@ BEGIN       return START;
 END         return END;
 SEQUENCE    return SEQUENCE;
 
+[-a-zA-Z0-9]+ { return STRING; }
 \n { nline++; nchar = 1;}
 
-
-[-a-zA-Z0-9]+ { return STRING; }
-
-
 [ \t] ; /* skip whitespace */
+[{},]        return *yytext;          
+
+. yyerror("invalid character");
 
 %%
 int yywrap(void) {
