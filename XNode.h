@@ -46,6 +46,12 @@ class StringNode : public XNode
     std::string _value;
 };
 
+inline std::ostream& operator<<(std::ostream& strm, XNode * s)
+{
+    strm << s->value();
+    return strm;
+}
+
 inline std::ostream& operator<<(std::ostream& strm, XNode & s)
 {
     strm << s.value();
