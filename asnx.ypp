@@ -3,7 +3,6 @@
 #include <iostream>
 #include "XNode.h"
 #define YYERROR_VERBOSE
-#define YYSTYPE  XNode
 
 int yylex(void);
 void yyerror(char *);
@@ -13,41 +12,69 @@ extern char* yytext;
 using namespace std;
 %}
 
-%token INTEGER
-%token STRING
-%token DEFINITIONS
-%token AUTOMATIC
-%token TAGS
-%token IS_DEFINED_AS
-%token START
-%token END
-%token SEQUENCE
-%token OPEN
+%union
+{
+    int intvalue;
+    XNode *node;
+}
+
+/* Define the tokens along with their "type"  */
+%token <intvalue> INTEGER
+%token <intvalue> STRING
+%token <intvalue> DEFINITIONS
+%token <intvalue> AUTOMATIC
+%token <intvalue> TAGS
+%token <intvalue> IS_DEFINED_AS
+%token <intvalue> START
+%token <intvalue> END
+%token <intvalue> SEQUENCE
+%token <intvalue> OPEN
+
+/* Define the production rule "types"  */
+%type <node> module
+%type <node> header
+%type <node> body
+%type <node> assignments
+%type <node> assignment
+%type <node> sequenceblock
+%type <node> sequencepair
+%type <node> value
+
+/* To destroy a node (nicer if type based) */
+%destructor { delete($$); } module
+%destructor { delete($$); } header
+%destructor { delete($$); } body
+%destructor { delete($$); } assignments
+%destructor { delete($$); } assignment
+%destructor { delete($$); } sequenceblock
+%destructor { delete($$); } sequencepair
+%destructor { delete($$); } value
+
 %%
 module:
     header body
 
 header: 
-    STRING DEFINITIONS AUTOMATIC TAGS IS_DEFINED_AS { cerr << "processing " <<  $1; }
-    |
+    STRING DEFINITIONS AUTOMATIC TAGS IS_DEFINED_AS { $$ = new XNode(); /* TODO */ cerr << "processing " <<  $1; }
+    |       { $$ = new XNode(); /* TODO  */}
     ;
 
 body: 
-    START '{' assignments '}' END
+    START '{' assignments '}' END { $$ = new XNode(); /* TODO */ }
     ;
 
 assignments:
-    assignments assignment 
-    |
+    assignments assignment { $$ = new XNode(); /* TODO */ }
+    |{ $$ = new XNode(); /* TODO */ }
     ;
 
 assignment:
-    STRING IS_DEFINED_AS SEQUENCE '{' sequenceblock '}'
+    STRING IS_DEFINED_AS SEQUENCE '{' sequenceblock '}'{ $$ = new XNode(); /* TODO */ }
     ;
 
 sequenceblock:
-    sequenceblock sequencepair
-    | 
+    sequenceblock sequencepair{ $$ = new XNode(); /* TODO */ }
+    | { $$ = new XNode(); /* TODO */ }
     ;
 
 sequencepair: 
@@ -58,7 +85,7 @@ sequencepair:
 value:
     STRING { 
          /* $$.setValue(g_yy_expr_current_string);   */
-         $$ = StringNode(g_yy_expr_current_string);
+         $$ = new StringNode(g_yy_expr_current_string);
          }
     ;
 
